@@ -1,16 +1,17 @@
 package main
 
 import (
-
-	// "net"
 	"flag"
+	"fmt"
 	"log"
+	"net"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var address string
-var port int64
+var port int
 var portrange string
 var portcheck bool
 
@@ -22,9 +23,9 @@ var method string
 func init() {
 	flag.StringVar(&address, "d", "", "Fill in any domain that you want to use.")
 	flag.StringVar(&address, "ip", "", "Fill in any IP address that you want to use.")
-	flag.Int64Var(&port, "p", 0, "Fill in any port that you want to use.")
+	flag.IntVar(&port, "p", 0, "Fill in any port that you want to use.")
 	flag.StringVar(&portrange, "pr", "", "Fill in any port range that you want to use.")
-	flag.BoolVar(&portcheck, "pch", false, "Do you want to check all the common ports? Use true/false")
+	flag.BoolVar(&portcheck, "pch", false, "Do you want to check all the common ports? Use true/false (W.I.P. Please leave empty.)")
 	flag.Parse()
 
 	if address == "" {
@@ -52,8 +53,9 @@ func init() {
 			method = "portrange"
 
 		}
+	} else {
+		method = "common"
 	}
-
 }
 
 func main() {
@@ -61,15 +63,31 @@ func main() {
 	switch method {
 	case "portrange":
 
+		// for ; i < endport; i++ {
+
+		// }
+
 	case "port":
-		log.Println("Checking port!")
-		log.Println(sniff(address, port))
+		fmt.Print("Checking: ")
+		fmt.Print(address)
+		fmt.Print(":")
+		fmt.Println(port)
+		fmt.Println(sniff(address, port))
 
 	case "common":
+		fmt.Println("Sorry this is still in progress and isn't finished. Sorry for the inconvenience")
 	}
 
 }
 
-func sniff(address string, port int) {
+func sniff(address string, port int) string {
+	F_port := strconv.Itoa(port)
 
+	_, err := net.DialTimeout("tcp", address+":"+F_port, time.Second)
+
+	if err == nil {
+		return "Open"
+	} else {
+		return "Closed"
+	}
 }
