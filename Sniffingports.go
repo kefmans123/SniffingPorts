@@ -63,9 +63,13 @@ func main() {
 	switch method {
 	case "portrange":
 
-		// for ; i < endport; i++ {
+		for i := startport; i < endport; i++ {
+			fmt.Print("[")
+			fmt.Print(i)
+			fmt.Print("]")
+			fmt.Println(sniff(address, i))
 
-		// }
+		}
 
 	case "port":
 		fmt.Print("Checking: ")
