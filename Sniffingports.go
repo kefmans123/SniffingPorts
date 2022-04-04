@@ -14,6 +14,7 @@ var address string
 var port int
 var portrange string
 var portcheck bool
+var status bool
 
 var startport int
 var endport int
@@ -67,7 +68,12 @@ func main() {
 			fmt.Print("[")
 			fmt.Print(i)
 			fmt.Print("]")
-			fmt.Println(sniff(address, i))
+			(sniff(address, i))
+			if status {
+				fmt.Println("Open")
+			} else {
+				fmt.Println("Closed")
+			}
 
 		}
 
@@ -76,7 +82,12 @@ func main() {
 		fmt.Print(address)
 		fmt.Print(":")
 		fmt.Println(port)
-		fmt.Println(sniff(address, port))
+		(sniff(address, port))
+		if status {
+			fmt.Println("Open")
+		} else {
+			fmt.Println("Closed")
+		}
 
 	case "common":
 		fmt.Println("Sorry this is still in progress and isn't finished. Sorry for the inconvenience")
@@ -84,14 +95,15 @@ func main() {
 
 }
 
-func sniff(address string, port int) string {
+func sniff(address string, port int) bool {
 	F_port := strconv.Itoa(port)
 
 	_, err := net.DialTimeout("tcp", address+":"+F_port, time.Second)
 
 	if err == nil {
-		return "Open"
+		status = true
 	} else {
-		return "Closed"
+		status = false
 	}
+	return status
 }
